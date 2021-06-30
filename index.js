@@ -1,20 +1,28 @@
 require('dotenv').config();
 
 const express = require('express');
-var cors = require('cors')
-
-//Configurar CORS
-app.use( cors() );
+const cors = require('cors');
 
 const { dbConnection } = require('./database/config');
 
-//Crear el servidor de express
+
+// Crear el servidor de express
 const app = express();
 
-//Base de datos
+// Configurar CORS
+app.use( cors() );
+
+// Lectura y parseo del body
+app.use( express.json() );
+
+// Base de datos
 dbConnection();
 
-//Rutas
-app.get('/', (req, res) => res.send('Hello World!'));
+//-Rutas
+// Users
+app.use('/api/users', require('./routes/users.routes'));
+
+// Auth
+app.use('/api/login', require('./routes/auth.routes'));
 
 app.listen( process.env.PORT , () => console.log(`Port ${process.env.PORT}`) );
